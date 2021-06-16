@@ -464,9 +464,9 @@ export class Refresher implements ComponentInterface {
       if (!this.pointerDown) {
         raf(() => raf(() => this.resetNativeRefresher(this.elementToTransform, RefresherState.Completing)));
       }
-    } else {
-      this.close(RefresherState.Completing, '120ms');
     }
+
+    this.close(RefresherState.Completing, '120ms');
   }
 
   /**
@@ -609,7 +609,7 @@ export class Refresher implements ComponentInterface {
     }
 
     if (deltaY > this.pullMax) {
-      // they pulled farther than the max, so kick off the refresh
+      // they pulled farther than the max, so end the related gesture, which will kick off the refresh
       this.beginRefresh();
       return;
     }
@@ -667,7 +667,7 @@ export class Refresher implements ComponentInterface {
     this.state = state;
     this.setCss(0, this.closeDuration, true, delay);
 
-    // TODO: stop gesture
+    this.gesture?.end();
   }
 
   private setCss(y: number, duration: string, overflowVisible: boolean, delay: string) {
